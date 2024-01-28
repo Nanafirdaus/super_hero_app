@@ -3,6 +3,8 @@ import 'package:super_hero_app/models/super_hero.dart';
 import 'package:super_hero_app/screens/detail_screen.dart';
 import 'package:super_hero_app/services/http_service.dart';
 
+import '../widgets/superhero_tile.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -22,45 +24,45 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.brown[200],
-        title: const Text("Super Heros"),
-        centerTitle: true,
-      ),
       body: FutureBuilder(
         future: superHeros,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Superhero> superHeros = snapshot.data!;
-            return Padding(
-              padding: const EdgeInsets.all(10),
-              child: ListView.builder(
-                itemCount: superHeros.length,
-                itemBuilder: (context, index) {
-                  Superhero superhero = superHeros[index];
-                  return Card(
-                    color: Colors.brown[200],
-                    child: ListTile(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return DetailScreen(
-                                superhero: superhero,
-                              );
-                            },
+            return DefaultTabController(
+              length: 3,
+              child: NestedScrollView(
+                headerSliverBuilder: (context, value) {
+                  return [
+                    SliverAppBar(
+                      toolbarHeight: 50,
+                      backgroundColor: Colors.brown[200],
+                      bottom: TabBar(
+                        unselectedLabelColor: Colors.white,
+                        labelColor: Colors.brown[500],
+                        indicatorColor: Colors.brown[500],
+                        tabs: const [
+                          Tab(
+                            text: "All",
                           ),
-                        );
-                      },
-                      title: Text(superhero.name!),
-                      leading: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage("${superhero.images!.lg}"),
+                          Tab(
+                            text: "Male",
+                          ),
+                          Tab(
+                            text: "Female",
+                          ),
+                        ],
                       ),
                     ),
-                  );
+                  ];
                 },
+                body: TabBarView(
+                  children: [
+                  SuperHeroView(superHeros: superHeros),
+                  SuperHeroView(superHeros: superHeros.where((superhero) => superhero.appearance!.gender! == "Male").toList(),),
+                  SuperHeroView(superHeros: superHeros.where((superhero) => superhero.appearance!.gender! == "Female").toList(),),
+                  ],
+                ),
               ),
             );
           }
