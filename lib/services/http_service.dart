@@ -17,7 +17,7 @@ class HttpService {
       return superHeros;
     } catch (e) {
       log(e.toString());
-      throw ("An Exception occured: $e");
+      throw ("An Exception occured: $e"); 
     }
   }
 }
