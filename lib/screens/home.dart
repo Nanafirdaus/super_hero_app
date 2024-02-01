@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:super_hero_app/models/super_hero.dart';
-import 'package:super_hero_app/screens/detail_screen.dart';
+import 'package:super_hero_app/screens/searc_screen.dart';
 import 'package:super_hero_app/services/http_service.dart';
 
-import '../widgets/superhero_tile.dart';
+import '../widgets/superhero_view.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -35,6 +35,44 @@ class _HomeState extends State<Home> {
                 headerSliverBuilder: (context, value) {
                   return [
                     SliverAppBar(
+                      title: Text(
+                        "SuperHeros",
+                        style: TextStyle(
+                            color: Colors.brown[700],
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.5),
+                      ),
+                      actions: [
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (builder) {
+                                      return const SearchScreen();
+                                    },
+                                  ),
+                                );
+                              },
+                              icon: Icon(
+                                Icons.search,
+                                size: 30,
+                                color: Colors.brown[700],
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.settings,
+                                size: 30,
+                                color: Colors.brown[700],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                       toolbarHeight: 50,
                       backgroundColor: Colors.brown[200],
                       bottom: TabBar(
@@ -58,9 +96,19 @@ class _HomeState extends State<Home> {
                 },
                 body: TabBarView(
                   children: [
-                  SuperHeroView(superHeros: superHeros),
-                  SuperHeroView(superHeros: superHeros.where((superhero) => superhero.appearance!.gender! == "Male").toList(),),
-                  SuperHeroView(superHeros: superHeros.where((superhero) => superhero.appearance!.gender! == "Female").toList(),),
+                    SuperHeroView(superHeros: superHeros),
+                    SuperHeroView(
+                      superHeros: superHeros
+                          .where((superhero) =>
+                              superhero.appearance!.gender! == "Male")
+                          .toList(),
+                    ),
+                    SuperHeroView(
+                      superHeros: superHeros
+                          .where((superhero) =>
+                              superhero.appearance!.gender! == "Female")
+                          .toList(),
+                    ),
                   ],
                 ),
               ),
